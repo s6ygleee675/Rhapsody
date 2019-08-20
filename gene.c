@@ -18,7 +18,7 @@ void g(int i, int j, char arr[], int Y[4]);
 // arr[] sequency information from ith to jth position, Y is array which contain the maximum continued sequence number of A, T, G, C.
 //For example, it there is a code AAATCGGGC, Y[0]=3, Y[1]=1, Y[2]=3, Y[3]=1
 
-void func(int a, int b, int error, char input[], char s[]);
+void func(int a, int b, int error, char input[], char s[], int Y1[4], int Y2[4]);
 char** datacopy(int n, FILE* fp);
 
 
@@ -55,7 +55,7 @@ int main(void){
 
 
 //open file
-	ifs = fopen("short.fastq.txt","r");
+	ifs = fopen("short.fastq","r");
 	if (ifs == NULL)
 	{
 		printf("Cannot open the file.\n");
@@ -182,22 +182,21 @@ int main(void){
 
 //list
 	n=50;
-	r=datacopy(n, list);
+	//r=datacopy(n, list);
 
 	
 //input data
-// printf("Which pattern you want to find? : ");
-// scanf("%s", input);
+ printf("Which pattern you want to find? : ");
+ scanf("%s", input);
 	printf("How many errors you expect in your pattern? : ");
 	scanf("%d", &error);
 
 
 //calculate input array length
-
-	for(i = 0; i < k; i++)
-	{
-		input[i]=p1[0][i];
-	}
+//	for(i = 0; i < k; i++)
+//	{
+//		input[i]=p1[0][i];
+//	}
 
 	b=f(input);
 	printf("length of p : %d \n", b);
@@ -210,7 +209,7 @@ int main(void){
 	srand(time(NULL));
 
 //main code
-	func(a[0], b, error, input, s);
+	func(a[0], b, error, input, s, Y1, Y2);
 	end = clock();
 	total_time = ((double) (end - start)) / CLK_TCK;
 
@@ -325,11 +324,9 @@ void g(int i, int j, char arr[], int Y[4])
 
 
 
-void func(int a, int b, int error, char input[], char s[])
+void func(int a, int b, int error, char input[], char s[], int Y1[4], int Y2[4])
 {
 	int t, x;
-	int Y1[4]={0};
-	int Y2[4]={0};
 	for(t = 0; t < a; t++)
 	{
 		int p=0; int n=0;
