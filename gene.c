@@ -97,6 +97,7 @@ int main(void){
 
 
 //copy data from file, data copy
+//data	
     	fseek(ifs, 0, SEEK_END);
     	size = ftell(ifs);         
     	buffer = malloc(size + 1);
@@ -109,9 +110,6 @@ int main(void){
 		{
 			s[x]=buffer[x];
 		}
-
-
-
 
 //cls1
     	fseek(cls1, 0, SEEK_END);
@@ -158,8 +156,6 @@ int main(void){
 			}
 		}
 
-
-
 //cls3
     	fseek(cls3, 0, SEEK_END);
     	size = ftell(cls3);         
@@ -181,7 +177,6 @@ int main(void){
 			w1[j][i]=w[k*j+i];
 			}
 		}
-
 
 //list
 	n=50;
@@ -242,9 +237,9 @@ int main(void){
 	fclose(cls3); 
 	fclose(list); 
 	free(buffer);
-    free(buffer1);
-    free(buffer2);
-    free(buffer3);  
+        free(buffer1);
+        free(buffer2);
+        free(buffer3);  
 	system("pause");
     return 0;
 }
@@ -253,8 +248,6 @@ int main(void){
 
 
 /*================================================================================*/
-
-
 int length(char arr[])
 {
 	int t, length=0;
