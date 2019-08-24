@@ -50,6 +50,7 @@ int main(void){
 	char w[50000]={0};
 	char w1[100][9] = {{0}};
 	char** r;
+	char tmp[3][100][9]={{{0}}};
 
 	char input[100]={0};
 	char *buffer;
@@ -184,39 +185,62 @@ int main(void){
 	n=50;
 	//r=datacopy(n, list);
 
+
+//copy data to tmp
+	for(n=0; n<3; n++)
+	{
+		for(j=0; j<100; j++)
+		{
+			for(i = 0; i < k; i++)
+			{
+				if (n==0){tmp[n][j][i]=p1[j][i];}
+				if (n==1){tmp[n][j][i]=q1[j][i];}
+				if (n==2){tmp[n][j][i]=w1[j][i];}
+
+			}
+		}
+	}
 	
 //input data
- printf("Which pattern you want to find? : ");
- scanf("%s", input);
+	// printf("Which pattern you want to find? : ");
+	// scanf("%s", input);
 	printf("How many errors you expect in your pattern? : ");
 	scanf("%d", &error);
-
-
-//calculate input array length
-//	for(i = 0; i < k; i++)
-//	{
-//		input[i]=p1[0][i];
-//	}
-
-	string_size=length(input);
-	printf("length of p : %d \n", string_size);
-
-//get sequence data of input array
-	gene_count(0, string_size-1, input, Y1);
 
 //time calculate
 	start = clock(); 
 	srand(time(NULL));
+	
+	for(n=0; n<3; n++)
+	{
+		for(j=0; j<100; j++)
+		{
+			for(i = 0; i < k; i++)
+			{
+				input[i]=tmp[n][j][i];
+			}
+			
+		//calculate input array length
+			string_size=length(input);
+			//printf("length of p : %d \n", string_size);
 
-//main code
-	func(data_size[0], string_size, error, input, data, Y1, Y2);
+		//get sequence data of input array
+			gene_count(0, string_size-1, input, Y1);
+
+		//main code
+			func(data_size[0], string_size, error, input, data, Y1, Y2);
+		}
+	}
+
+
+
 	end = clock();
 	total_time = ((double) (end - start)) / CLK_TCK;
 
 //print result
-// printf("Complexity(executed algorithm/size of data) : %.0f/%d \n", cycle, a);
+	// printf("Complexity(executed algorithm/size of data) : %.0f/%d \n", cycle, a);
 	printf("Time taken to analyze : %f \n", total_time);
-
+	
 
 // closing
     for(t = 0; t < 50000; t++)
