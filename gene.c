@@ -41,6 +41,8 @@ int main(void){
 	double total_time;
 	clock_t start, end;
 	char data[50000]={0};
+	
+	//p,p1, q,q1, w,w1, r are also data saving variables
 	char p[50000]={0};
 	char p1[100][9] = {{0}};
 	char q[50000]={0};
