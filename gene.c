@@ -317,6 +317,13 @@ void gene_count(int i, int j, char arr[], int Y[4])
 
 void func(int a, int b, int error, char input[], char s[], int Y1[4], int Y2[4])
 {
+	//'error' is number of error you expect in input string
+	//char s[] is the originial data you want to use
+	//input string is the string you want to find
+	//Y1 & Y2 save the gene count data
+	// int a : size of the data
+	// int b : input string length
+	
 	int t, x;
 	for(t = 0; t < a; t++)
 	{
