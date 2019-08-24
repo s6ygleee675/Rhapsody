@@ -19,8 +19,8 @@ void gene_count(int i, int j, char arr[], int Y[4]);
 // arr[] sequency information from ith to jth position, Y is array which contain the maximum continued sequence number of A, T, G, C.
 //For example, it there is a code AAATCGGGC, Y[0]=3, Y[1]=1, Y[2]=3, Y[3]=1
 
-void func(int data_size, int string_size, int error, char input[], char s[], int Y1[4], int Y2[4]);
-//main fuction, find the position of the input array on the char s[]
+void func(int data_size, int string_size, int error, char input[], char data[], int Y1[4], int Y2[4]);
+//main fuction, find the position of the input array on the char data[]
 
 char** datacopy(int n, FILE* fp);
 
@@ -40,7 +40,7 @@ int main(void){
 	double cycle=0;
 	double total_time;
 	clock_t start, end;
-	char s[50000]={0};
+	char data[50000]={0};
 	char p[50000]={0};
 	char p1[100][9] = {{0}};
 	char q[50000]={0};
@@ -108,7 +108,7 @@ int main(void){
 		
 		for(x = 0; x < data_size[0]; x++)
 		{
-			s[x]=buffer[x];
+			data[x]=buffer[x];
 		}
 
 //cls1
@@ -207,7 +207,7 @@ int main(void){
 	srand(time(NULL));
 
 //main code
-	func(data_size[0], string_size, error, input, s, Y1, Y2);
+	func(data_size[0], string_size, error, input, data, Y1, Y2);
 	end = clock();
 	total_time = ((double) (end - start)) / CLK_TCK;
 
@@ -219,7 +219,7 @@ int main(void){
 // closing
     for(t = 0; t < 50000; t++)
     {
-	    s[t]=0;
+	    data[t]=0;
 	    p[t]=0;
 	    q[t]=0;
 	    w[t]=0;
@@ -315,10 +315,10 @@ void gene_count(int i, int j, char arr[], int Y[4])
 
 
 
-void func(int data_size, int string_size, int error, char input[], char s[], int Y1[4], int Y2[4])
+void func(int data_size, int string_size, int error, char input[], char data[], int Y1[4], int Y2[4])
 {
 	//'error' is number of error you expect in input string
-	//char s[] is the originial data you want to use
+	//char data[] is the originial data you want to use
 	//input string is the string you want to find
 	//Y1 & Y2 save the gene count data
 	// int data_size: size of the data
@@ -328,7 +328,7 @@ void func(int data_size, int string_size, int error, char input[], char s[], int
 	for(t = 0; t < data_size; t++)
 	{
 		int p=0; int n=0;
-		gene_count(t, t+string_size-1, s, Y2);
+		gene_count(t, t+string_size-1, data, Y2);
 		for(x = 0; x < 4; x++)
 		{
 			p+=abs(Y1[x]-Y2[x]);
@@ -339,7 +339,7 @@ void func(int data_size, int string_size, int error, char input[], char s[], int
 		{
 			for(x = 0; x < string_size; x++)
 			{
-				if(input[x]!=s[t+x])
+				if(input[x]!=data[t+x])
 					n++;
 			}
 			if(n<=error)
