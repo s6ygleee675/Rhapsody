@@ -4,7 +4,7 @@
 2. Add the gene.c
 3. Copy the attached txt file, fastq in same directory with gene.c
 
-  gene.txt : test file
+   gene.txt : test file
   
-  short.fastq : analyzing file
+   short.fastq : analyzing file
   
