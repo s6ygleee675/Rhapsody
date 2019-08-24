@@ -11,14 +11,17 @@ code : Visual studio, C, finding the particular pattern in gene codes
 #include<time.h>
 
 //function declaration
-int f(char arr[]);
-// length calculation of the arr[]
 
-void g(int i, int j, char arr[], int Y[4]);
+int length(char arr[]);
+// length calculation othe arr[]
+
+void gene_count(int i, int j, char arr[], int Y[4]);
 // arr[] sequency information from ith to jth position, Y is array which contain the maximum continued sequence number of A, T, G, C.
 //For example, it there is a code AAATCGGGC, Y[0]=3, Y[1]=1, Y[2]=3, Y[3]=1
 
 void func(int a, int b, int error, char input[], char s[], int Y1[4], int Y2[4]);
+//main fuction, find the position of the input array on the char s[]
+
 char** datacopy(int n, FILE* fp);
 
 
@@ -198,11 +201,11 @@ int main(void){
 //		input[i]=p1[0][i];
 //	}
 
-	b=f(input);
+	b=length(input);
 	printf("length of p : %d \n", b);
 
 //get sequence data of input array
-	g(0, b-1, input, Y1);
+	gene_count(0, b-1, input, Y1);
 
 //time calculate
 	start = clock(); 
@@ -252,7 +255,7 @@ int main(void){
 /*================================================================================*/
 
 
-int f(char arr[])
+int length(char arr[])
 {
 	int t, length=0;
 	for(t = 0; t < 100; t++)
@@ -269,7 +272,7 @@ int f(char arr[])
 
 
 
-void g(int i, int j, char arr[], int Y[4])
+void gene_count(int i, int j, char arr[], int Y[4])
 {
 	int a=0, t=0, g=0, c=0, k;
 	for(k = 0; k < 4; k++)
@@ -330,7 +333,7 @@ void func(int a, int b, int error, char input[], char s[], int Y1[4], int Y2[4])
 	for(t = 0; t < a; t++)
 	{
 		int p=0; int n=0;
-		g(t, t+b-1, s, Y2);
+		gene_count(t, t+b-1, s, Y2);
 		for(x = 0; x < 4; x++)
 		{
 			p+=abs(Y1[x]-Y2[x]);
