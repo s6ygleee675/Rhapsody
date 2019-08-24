@@ -32,7 +32,7 @@ int main(void){
 	FILE * cls2;
 	FILE * cls3;
 	FILE * list;
-	int a[4]={0}, b=0, error=0;
+	int data_size[4]={0}, b=0, error=0;
 	int i, j, n, t, x;
 	int k=9;
 	int Y1[4]={0};
@@ -104,9 +104,9 @@ int main(void){
 		memset(buffer, 0, size + 1);  
     	fseek(ifs, 0, SEEK_SET);                
     	count = fread(buffer, size, 1, ifs);  
-		a[0]=size;
+		data_size[0]=size;
 		
-		for(x = 0; x < a[0]; x++)
+		for(x = 0; x < data_size[0]; x++)
 		{
 			s[x]=buffer[x];
 		}
@@ -118,9 +118,9 @@ int main(void){
 		memset(buffer1, 0, size + 1);  
     	fseek(cls1, 0, SEEK_SET);                
     	count = fread(buffer1, size, 1, cls1);  		
-		a[1]=size;
+		data_size[1]=size;
 		
-		for(x = 0; x < a[1]; x++)
+		for(x = 0; x < data_size[1]; x++)
 		{
 			p[x]=buffer1[x];
 		}
@@ -141,9 +141,9 @@ int main(void){
 		memset(buffer2, 0, size + 1);  
     	fseek(cls2, 0, SEEK_SET);                
     	count = fread(buffer2, size, 1, cls2);  
-		a[2]=size;
+		data_size[2]=size;
 		
-		for(x = 0; x < a[2]; x++)
+		for(x = 0; x < data_size[2]; x++)
 		{
 			q[x]=buffer2[x];
 		}
