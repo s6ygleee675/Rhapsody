@@ -262,9 +262,6 @@ int length(char arr[])
 
 
 
-
-
-
 void gene_count(int i, int j, char arr[], int Y[4])
 {
 	int a=0, t=0, g=0, c=0, k;
@@ -288,13 +285,11 @@ void gene_count(int i, int j, char arr[], int Y[4])
 				Y[1]=t;
 			}
 
-
 			if(arr[k]=='G')
 			{g++;
 			if(g>Y[2])
 				Y[2]=g;
 			}
-
 
 			if(arr[k]=='C')
 			{c++;
@@ -309,7 +304,7 @@ void gene_count(int i, int j, char arr[], int Y[4])
 			a=1; t=1; g=1; c=1;
 			if(arr[k]=='A' && 1>Y[0])		Y[0]=1;
 			if(arr[k]=='T' && 1>Y[1])		Y[1]=1;
-			if(arr[k]=='G' && 1>Y[2]) 	    Y[2]=1;
+			if(arr[k]=='G' && 1>Y[2]) 	        Y[2]=1;
 			if(arr[k]=='C' && 1>Y[3])		Y[3]=1;
 
 		}
@@ -332,11 +327,9 @@ void func(int a, int b, int error, char input[], char s[], int Y1[4], int Y2[4])
 			p+=abs(Y1[x]-Y2[x]);
 			Y2[x]=0;
 		}
-		// cycle=cycle+0.33333;
 		
 		if(p<=error)
 		{
-			// cycle=cycle+0.33333;
 			for(x = 0; x < b; x++)
 			{
 				if(input[x]!=s[t+x])
@@ -345,7 +338,6 @@ void func(int a, int b, int error, char input[], char s[], int Y1[4], int Y2[4])
 			if(n<=error)
 			{
 				printf("HERE IS THE POSITION : %d to %d \n", t+1, t+b);
-				// cycle=cycle+0.33333;
 				// break; 
 				// Can be added when you want to one position in the data.
 			}
@@ -357,6 +349,7 @@ void func(int a, int b, int error, char input[], char s[], int Y1[4], int Y2[4])
 
 
 
+/*================================================================================*/
 char** datacopy(int n, FILE* fp)
 {
 	int i, j;
@@ -420,5 +413,3 @@ char** datacopy(int n, FILE* fp)
 
 	return array;
 }
-
-
