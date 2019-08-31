@@ -22,7 +22,7 @@ void gene_count(int i, int j, char arr[], int Y[4]);
 void func(int data_size, int string_size, int error, char input[], char data[], int Y1[4], int Y2[4]);
 //main fuction, find the position of the input array on the char data[]
 
-char** datacopy(int n, FILE* fp);
+char (*datacopy(FILE* fp))[100];
 
 
 int main(void){
@@ -49,7 +49,9 @@ int main(void){
 	char q1[100][9] = {{0}};
 	char w[50000]={0};
 	char w1[100][9] = {{0}};
-	char** r;
+	char strTemp[100]={0};
+	char *pStr;
+	char arr[100][100]={{0}};
 	char tmp[3][100][9]={{{0}}};
 
 	char input[100]={0};
@@ -182,8 +184,30 @@ int main(void){
 		}
 
 //list
-	n=50;
-	//r=datacopy(n, list);
+	if(list != NULL)
+	{
+		i=0;
+		while(!feof(list))
+		{
+			pStr = fgets( strTemp, sizeof(strTemp), list);
+
+			for(j = 0; j < 100; j++)
+			{
+				if(strTemp[j]!=0)
+				{
+					arr[i][j]=strTemp[j];
+				}
+				if(strTemp[j]==0)
+				{break;}
+			}
+			i+=1;
+		}
+	}
+	else
+	{
+	   fprintf(stderr, "Error opening 'file.txt'; Bailing out!");
+	}
+
 
 
 //copy data to tmp
@@ -210,10 +234,12 @@ int main(void){
 //time calculate
 	start = clock(); 
 	srand(time(NULL));
-	
-	for(n=0; n<3; n++)
+
+
+printf("#########################    CLS    ##########################\n");
+for(j=0; j<100; j++)
 	{
-		for(j=0; j<100; j++)
+		for(n=0; n<3; n++)
 		{
 			for(i = 0; i < k; i++)
 			{
@@ -232,7 +258,23 @@ int main(void){
 		}
 	}
 
+	printf("#########################   SEARCH   #########################\n");
+	for(j=0; j<3; j++)
+	{
+		for(i = 0; i < 100; i++)
+		{
+			input[i]=arr[j][i];
+		}
+		//calculate input array length
+		string_size=length(input);
+		//printf("length of p : %d \n", string_size);
 
+		//get sequence data of input array
+		gene_count(0, string_size-1, input, Y1);
+
+		//main code
+		func(data_size[0], string_size, error, input, data, Y1, Y2);
+	}
 
 	end = clock();
 	total_time = ((double) (end - start)) / CLK_TCK;
@@ -263,9 +305,9 @@ int main(void){
 	fclose(cls3); 
 	fclose(list); 
 	free(buffer);
-        free(buffer1);
-        free(buffer2);
-        free(buffer3);  
+	free(buffer1);
+	free(buffer2);
+	free(buffer3);  
 	system("pause");
     return 0;
 }
@@ -350,10 +392,17 @@ void func(int data_size, int string_size, int error, char input[], char data[], 
 	// int data_size: size of the data
 	// int b : input string length
 	
-	int t, x;
+	int t, x, count, pos;
+	int p,n;
+	count=0; pos=0;
 	for(t = 0; t < data_size; t++)
 	{
-		int p=0; int n=0;
+		if(data[t]=='\n')
+		{
+			count++;
+			pos=t;
+		}
+		p=0; n=0;
 		gene_count(t, t+string_size-1, data, Y2);
 		for(x = 0; x < 4; x++)
 		{
@@ -370,7 +419,7 @@ void func(int data_size, int string_size, int error, char input[], char data[], 
 			}
 			if(n<=error)
 			{
-				printf("HERE IS THE POSITION : %d to %d \n", t+1, t+string_size);
+				printf("HERE IS THE POSITION : Line%4d, %2d to %2d \n", count, t-pos+1, t-pos+string_size);
 				// break; 
 				// Can be added when you want to one position in the data.
 			}
@@ -383,66 +432,35 @@ void func(int data_size, int string_size, int error, char input[], char data[], 
 
 
 /*================================================================================*/
-char** datacopy(int n, FILE* fp)
+char (*datacopy(FILE* fp))[100]
 {
+	char strTemp[100]={0};
+	char *pStr;
+	char arr[100][100]={{0}};
 	int i, j;
-	int max = 1;
-	int count=1;
-	char** array;
-	array = malloc(n * sizeof(*array)); /* Assuming `n` is the number of rows */
-
-	if(!array) /* If `malloc` failed */
+	if(fp != NULL)
 	{
-	    fprintf(stderr, "Error allocating memory; Bailing out!");
-	    exit(-1);
+		i=0;
+		while(!feof(fp))
+		{
+			pStr = fgets( strTemp, sizeof(strTemp), fp);
+
+			for(j = 0; j < 100; j++)
+			{
+				if(strTemp[j]!=0)
+				{
+					arr[i][j]=strTemp[j];
+				}
+				if(strTemp[j]==0)
+				{break;}
+			}
+			i+=1;
+		}
+		fclose(fp);
 	}
-
-	for(i = 0; i < n; i++)
+	else
 	{
-	    array[i] = malloc(count * sizeof(**array));
-	    if(!array[i]) /* If `malloc` failed */
-	    {
-	        for(j = 0; j < i; j++) /* free previously allocated memory */
-	        {
-	            free(array[j]); 
-	        }
-	        free(array);
-	        fprintf(stderr, "Error allocating memory; Bailing out!");
-	        exit(-1);
-	    }
-	    count++;
-	}
-
-	if(!fp)
-	{
-	   for(i = 0; i < n; i++) /* free previously allocated memory */
-	   {
-	      free(array[i]); 
-	   }
-	   free(array);
 	   fprintf(stderr, "Error opening 'file.txt'; Bailing out!");
-	   exit(-1);
 	}
-	
-	for(i = 0; i < n; i++)
-	{
-	    for(count = 0; count < max; count++)
-	    {
-	        fscanf(fp, "%s", &array[i][count]);
-	    }
-	    max++;
-	}
-	
-
-	max = 1;
-	for(i = 0; i < n; i++)
-	{
-	    for(count = 0; count < max; count++)
-	    {
-	        printf("array[%d][%d] = %s", i, count, array[i][count]);
-	    }
-	    max++;
-	}
-
-	return array;
+	return arr;
 }
