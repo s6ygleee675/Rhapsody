@@ -5,6 +5,10 @@
 3. Copy the attached txt file, fastq in same directory with gene.c
 
    gene.txt : test file
+   
+   CLS.txt  : Marking code file 
+   
+   list.txt : Target code file
   
    short.fastq : analyzing file
   
