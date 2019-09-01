@@ -258,47 +258,47 @@ for(j=0; j<100; j++)
 		}
 	}
 
-	printf("#########################   SEARCH   #########################\n");
-	for(j=0; j<3; j++)
+printf("#########################   SEARCH   #########################\n");
+for(j=0; j<3; j++)
+{
+	for(i = 0; i < 100; i++)
 	{
-		for(i = 0; i < 100; i++)
-		{
-			input[i]=arr[j][i];
-		}
-		//calculate input array length
-		string_size=length(input);
-		//printf("length of p : %d \n", string_size);
-
-		//get sequence data of input array
-		gene_count(0, string_size-1, input, Y1);
-
-		//main code
-		func(data_size[0], string_size, error, input, data, Y1, Y2);
+		input[i]=arr[j][i];
 	}
+	//calculate input array length
+	string_size=length(input);
+	//printf("length of p : %d \n", string_size);
+
+	//get sequence data of input array
+	gene_count(0, string_size-1, input, Y1);
+
+	//main code
+	func(data_size[0], string_size, error, input, data, Y1, Y2);
+}
 
 	end = clock();
 	total_time = ((double) (end - start)) / CLK_TCK;
 
-//print result
+	//print result
 	// printf("Complexity(executed algorithm/size of data) : %.0f/%d \n", cycle, a);
 	printf("Time taken to analyze : %f \n", total_time);
 	
-
+	
 // closing
-    for(t = 0; t < 50000; t++)
-    {
-	    data[t]=0;
-	    p[t]=0;
-	    q[t]=0;
-	    w[t]=0;
-    }
-
+	for(t = 0; t < 50000; t++)
+	{
+		data[t]=0;
+		p[t]=0;
+		q[t]=0;
+		w[t]=0;
+	}
+	
 	for(t = 0; t < 4; t++)
-    {
+	{
 		Y1[t]=0;
 		Y2[t]=0;
-    }
-
+	}
+	
 	fclose(ifs);   
 	fclose(cls1);   
 	fclose(cls2);   
@@ -309,11 +309,8 @@ for(j=0; j<100; j++)
 	free(buffer2);
 	free(buffer3);  
 	system("pause");
-    return 0;
+	return 0;
 }
-
-
-
 
 /*================================================================================*/
 int length(char arr[])
@@ -425,42 +422,4 @@ void func(int data_size, int string_size, int error, char input[], char data[], 
 			}
 		}
 	}
-}
-
-
-
-
-
-/*================================================================================*/
-char (*datacopy(FILE* fp))[100]
-{
-	char strTemp[100]={0};
-	char *pStr;
-	char arr[100][100]={{0}};
-	int i, j;
-	if(fp != NULL)
-	{
-		i=0;
-		while(!feof(fp))
-		{
-			pStr = fgets( strTemp, sizeof(strTemp), fp);
-
-			for(j = 0; j < 100; j++)
-			{
-				if(strTemp[j]!=0)
-				{
-					arr[i][j]=strTemp[j];
-				}
-				if(strTemp[j]==0)
-				{break;}
-			}
-			i+=1;
-		}
-		fclose(fp);
-	}
-	else
-	{
-	   fprintf(stderr, "Error opening 'file.txt'; Bailing out!");
-	}
-	return arr;
 }
