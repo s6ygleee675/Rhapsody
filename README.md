@@ -11,4 +11,6 @@
    list.txt : Target code file
   
    short.fastq : analyzing file
+   
+   1000_from_middle.fastq : analyzing file
   
