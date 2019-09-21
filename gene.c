@@ -19,7 +19,7 @@ void gene_count(int i, int j, char arr[], int Y[4]);
 // arr[] sequency information from ith to jth position, Y is array which contain the maximum continued sequence number of A, T, G, C.
 //For example, it there is a code AAATCGGGC, Y[0]=3, Y[1]=1, Y[2]=3, Y[3]=1
 
-void func(int data_size, int string_size, int error, char input[], char data[], int Y1[4], int Y2[4]);
+int func(int data_size, int string_size, int error, int frequency, char input[], char data[], int Y1[4], int Y2[4]);
 //main fuction, find the position of the input array on the char data[]
 
 char (*datacopy(FILE* fp))[100];
@@ -32,6 +32,8 @@ int main(void){
 	FILE * cls2;
 	FILE * cls3;
 	FILE * list;
+	FILE * out;
+
 	int data_size[4]={0}, string_size=0, error=0;
 	int i, j, n, t, x;
 	int k=9;
@@ -53,16 +55,41 @@ int main(void){
 	char *pStr;
 	char arr[100][100]={{0}};
 	char tmp[3][100][9]={{{0}}};
-
+	char filename[100];
 	char input[100]={0};
 	char *buffer;
 	char *buffer1;
 	char *buffer2;
 	char *buffer3;
 	int size, count;
+	int frequency=0;
+
+	int tmparr[3][100][2]={{{0}}};
+	int tmparr2[100][2]={{{0}}};
+
+	//initializing
+	for(j=0; j<100; j++)
+	{
+		for(k=0; j<2; k++)
+		{
+			tmparr2[j][k]=0;
+		}
+	}
+
+	for(n=0; n<3; n++)
+	{
+		for(j=0; j<100; j++)
+		{
+			for(k=0; j<2; k++)
+			{
+				tmparr[n][j][k]=0;
+			}
+		}
+	}
 
 
 //open file
+//	ifs = fopen("1000_from_middle.fastq","r");	
 	ifs = fopen("short.fastq","r");
 	if (ifs == NULL)
 	{
@@ -209,6 +236,16 @@ int main(void){
 	}
 
 
+//	for(j = 0; j < 100; j++)
+//	{
+//	for(i = 0; i < 100; i++)
+//	{
+//		printf("%c",arr[j][i]);
+//	}
+//	printf("\n");
+//	}
+
+
 
 //copy data to tmp
 	for(n=0; n<3; n++)
@@ -228,8 +265,8 @@ int main(void){
 //input data
 	// printf("Which pattern you want to find? : ");
 	// scanf("%s", input);
-	printf("How many errors you expect in your pattern? : ");
-	scanf("%d", &error);
+//	printf("How many errors you expect in your pattern? : ");
+//	scanf("%d", &error);
 
 //time calculate
 	start = clock(); 
@@ -237,6 +274,9 @@ int main(void){
 
 
 printf("#########################    CLS    ##########################\n");
+error=0;
+frequency=0;
+while(frequency==0){
 for(j=0; j<100; j++)
 	{
 		for(n=0; n<3; n++)
@@ -254,17 +294,46 @@ for(j=0; j<100; j++)
 			gene_count(0, string_size-1, input, Y1);
 
 		//main code
-			func(data_size[0], string_size, error, input, data, Y1, Y2);
+			frequency=func(data_size[0], string_size, error, frequency, input, data, Y1, Y2);
+			tmparr[n][j][0]=frequency;
+			tmparr[n][j][1]=error;
 		}
 	}
 
+if(frequency==0)
+{error++;}
+}
+
 printf("#########################   SEARCH   #########################\n");
-for(j=0; j<3; j++)
+error=0;
+frequency=0;
+while(frequency==0){
+for(j=0; j<100; j++)
 {
+	if(arr[j][0]==0){break;}
+	else
+	{
+		for(i = 0; i < 100; i++)
+		{
+			input[i]=0;
+		}
+	}
+
 	for(i = 0; i < 100; i++)
 	{
-		input[i]=arr[j][i];
+		if(arr[j][i]!=0)
+		{input[i]=arr[j][i];}
+
+		if(arr[j][i]==0)
+		{break;}
 	}
+
+//	for(i = 0; i < 100; i++)
+//	{
+//		printf("%c",input[i]);
+//	}
+//	printf("\n");
+
 	//calculate input array length
 	string_size=length(input);
 	//printf("length of p : %d \n", string_size);
@@ -273,32 +342,62 @@ for(j=0; j<3; j++)
 	gene_count(0, string_size-1, input, Y1);
 
 	//main code
-	func(data_size[0], string_size, error, input, data, Y1, Y2);
+	frequency=func(data_size[0], string_size, error, frequency,input, data, Y1, Y2);
+	tmparr2[j][0]=frequency;
+	tmparr2[j][1]=error;
 }
 
+if(frequency==0)
+{error++;}
+}
 	end = clock();
 	total_time = ((double) (end - start)) / CLK_TCK;
 
-	//print result
+
+//txt out file
+
+	for(n=0; n<3; n++){
+		sprintf(filename,"plot_CLS%d.txt",n+1);
+		out=fopen(filename,"w");
+		for(j=0; j<100; j++){
+			if(tmparr[n][j][0]!=0){
+				fprintf(out,"%d	%d	%d\n",j+1, tmparr[n][j][0], tmparr[n][j][1]);
+				printf("%d\n", tmparr[n][j][0]);
+			}
+		}
+		fclose(out);
+	}
+
+	out=fopen("plot_list.txt","w");
+	for(j=0; j<100; j++)
+	{
+		if(tmparr2[j][0]!=0){
+			fprintf(out,"%d	%d	%d\n",j+1, tmparr2[j][0], tmparr2[j][1]);
+			printf("%d\n", tmparr[n][j][0]);
+		}
+	}
+	fclose(out);
+
+//print result
 	// printf("Complexity(executed algorithm/size of data) : %.0f/%d \n", cycle, a);
 	printf("Time taken to analyze : %f \n", total_time);
 	
-	
+
 // closing
-	for(t = 0; t < 50000; t++)
-	{
-		data[t]=0;
-		p[t]=0;
-		q[t]=0;
-		w[t]=0;
-	}
-	
+    for(t = 0; t < 50000; t++)
+    {
+	    data[t]=0;
+	    p[t]=0;
+	    q[t]=0;
+	    w[t]=0;
+    }
+
 	for(t = 0; t < 4; t++)
-	{
+    {
 		Y1[t]=0;
 		Y2[t]=0;
-	}
-	
+    }
+
 	fclose(ifs);   
 	fclose(cls1);   
 	fclose(cls2);   
@@ -309,8 +408,11 @@ for(j=0; j<3; j++)
 	free(buffer2);
 	free(buffer3);  
 	system("pause");
-	return 0;
+    return 0;
 }
+
+
+
 
 /*================================================================================*/
 int length(char arr[])
@@ -369,7 +471,7 @@ void gene_count(int i, int j, char arr[], int Y[4])
 			a=1; t=1; g=1; c=1;
 			if(arr[k]=='A' && 1>Y[0])		Y[0]=1;
 			if(arr[k]=='T' && 1>Y[1])		Y[1]=1;
-			if(arr[k]=='G' && 1>Y[2]) 	        Y[2]=1;
+			if(arr[k]=='G' && 1>Y[2]) 	    Y[2]=1;
 			if(arr[k]=='C' && 1>Y[3])		Y[3]=1;
 
 		}
@@ -380,7 +482,7 @@ void gene_count(int i, int j, char arr[], int Y[4])
 
 
 
-void func(int data_size, int string_size, int error, char input[], char data[], int Y1[4], int Y2[4])
+int func(int data_size, int string_size, int error, int frequency, char input[], char data[], int Y1[4], int Y2[4])
 {
 	//'error' is number of error you expect in input string
 	//char data[] is the originial data you want to use
@@ -417,9 +519,50 @@ void func(int data_size, int string_size, int error, char input[], char data[], 
 			if(n<=error)
 			{
 				printf("HERE IS THE POSITION : Line%4d, %2d to %2d \n", count, t-pos+1, t-pos+string_size);
+				printf("Error: %d\n",error);
+				frequency++;
 				// break; 
 				// Can be added when you want to one position in the data.
 			}
 		}
 	}
+	return frequency;
+}
+
+
+
+
+
+/*================================================================================*/
+char (*datacopy(FILE* fp))[100]
+{
+	char strTemp[100]={0};
+	char *pStr;
+	char arr[100][100]={{0}};
+	int i, j;
+	if(fp != NULL)
+	{
+		i=0;
+		while(!feof(fp))
+		{
+			pStr = fgets( strTemp, sizeof(strTemp), fp);
+
+			for(j = 0; j < 100; j++)
+			{
+				if(strTemp[j]!=0)
+				{
+					arr[i][j]=strTemp[j];
+				}
+				if(strTemp[j]==0)
+				{break;}
+			}
+			i+=1;
+		}
+		fclose(fp);
+	}
+	else
+	{
+	   fprintf(stderr, "Error opening 'file.txt'; Bailing out!");
+	}
+	return arr;
 }
