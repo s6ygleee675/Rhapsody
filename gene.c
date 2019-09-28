@@ -1,5 +1,5 @@
 /*
-Updated : August 5th
+Updated : September 28th
 Author : Youngik Lee
 code : Visual studio, C, finding the particular pattern in gene codes
 */
@@ -19,10 +19,10 @@ void gene_count(int i, int j, char arr[], int Y[4]);
 // arr[] sequency information from ith to jth position, Y is array which contain the maximum continued sequence number of A, T, G, C.
 //For example, it there is a code AAATCGGGC, Y[0]=3, Y[1]=1, Y[2]=3, Y[3]=1
 
-int func(int data_size, int string_size, int error, int frequency, char input[], char data[], int Y1[4], int Y2[4]);
+float * func(FILE * out, int j, int data_size, int string_size, int error, int frequency, char input[], char data[], int Y1[4], int Y2[4]);
 //main fuction, find the position of the input array on the char data[]
 
-char (*datacopy(FILE* fp))[100];
+float change2decimal(float X);
 
 
 int main(void){
@@ -34,6 +34,7 @@ int main(void){
 	FILE * list;
 	FILE * out;
 
+
 	int data_size[4]={0}, string_size=0, error=0;
 	int i, j, n, t, x;
 	int k=9;
@@ -42,7 +43,7 @@ int main(void){
 	double cycle=0;
 	double total_time;
 	clock_t start, end;
-	char data[50000]={0};
+	char data[500000]={0};
 	
 	//p,p1, q,q1, w,w1, r are also data saving variables
 	char p[50000]={0};
@@ -64,15 +65,16 @@ int main(void){
 	int size, count;
 	int frequency=0;
 
-	int tmparr[3][100][2]={{{0}}};
-	int tmparr2[100][2]={{{0}}};
+	float pos0=0, err=0;
+	int tmprr[3][100][2]={{{-1}}};
+	int tmprr2[100][2]={{-1}};
 
 	//initializing
 	for(j=0; j<100; j++)
 	{
-		for(k=0; j<2; k++)
+		for(i=0; i<2; i++)
 		{
-			tmparr2[j][k]=0;
+			tmprr2[j][i]=-1;
 		}
 	}
 
@@ -80,23 +82,21 @@ int main(void){
 	{
 		for(j=0; j<100; j++)
 		{
-			for(k=0; j<2; k++)
+			for(i=0; i<2; i++)
 			{
-				tmparr[n][j][k]=0;
+				tmprr[n][j][i]=-1;
 			}
 		}
 	}
-
-
+	
 //open file
-//	ifs = fopen("1000_from_middle.fastq","r");	
-	ifs = fopen("short.fastq","r");
+	ifs = fopen("1000_from_middle.fastq","r");	
 	if (ifs == NULL)
 	{
 		printf("Cannot open the file.\n");
 		return 1;
 	}
-
+	
 	cls1 = fopen("CLS1.txt","r");
 	if (cls1 == NULL)
 	{
@@ -126,8 +126,6 @@ int main(void){
 	}
 
 
-
-
 //copy data from file, data copy
 //data	
     	fseek(ifs, 0, SEEK_END);
@@ -142,6 +140,7 @@ int main(void){
 		{
 			data[x]=buffer[x];
 		}
+		
 
 //cls1
     	fseek(cls1, 0, SEEK_END);
@@ -158,8 +157,7 @@ int main(void){
 		}
 		
 		for(j = 0; j < 100; j++)
-		{
-		
+		{		
 			for(i = 0; i < k; i++)
 			{
 			p1[j][i]=p[k*j+i];
@@ -182,7 +180,7 @@ int main(void){
 		
 		for(j = 0; j < 100; j++)
 		{
-		for(i = 0; i < k; i++)
+			for(i = 0; i < k; i++)
 			{
 			q1[j][i]=q[k*j+i];
 			}
@@ -209,7 +207,7 @@ int main(void){
 			w1[j][i]=w[k*j+i];
 			}
 		}
-
+		
 //list
 	if(list != NULL)
 	{
@@ -234,7 +232,6 @@ int main(void){
 	{
 	   fprintf(stderr, "Error opening 'file.txt'; Bailing out!");
 	}
-
 
 //	for(j = 0; j < 100; j++)
 //	{
@@ -265,8 +262,8 @@ int main(void){
 //input data
 	// printf("Which pattern you want to find? : ");
 	// scanf("%s", input);
-//	printf("How many errors you expect in your pattern? : ");
-//	scanf("%d", &error);
+	// printf("How many errors you expect in your pattern? : ");
+	// scanf("%d", &error);
 
 //time calculate
 	start = clock(); 
@@ -274,13 +271,17 @@ int main(void){
 
 
 printf("#########################    CLS    ##########################\n");
-error=0;
-frequency=0;
-while(frequency==0){
-for(j=0; j<100; j++)
+for(n=0; n<3; n++)
+{
+	sprintf(filename,"plot_CLS%d_position.txt",n+1);
+	out=fopen(filename,"w");
+	
+	for(j=0; j<100; j++)
 	{
-		for(n=0; n<3; n++)
-		{
+		error=0;
+		frequency=0;
+		if(tmp[n][j][0]==0){break;}
+		while(frequency==0){
 			for(i = 0; i < k; i++)
 			{
 				input[i]=tmp[n][j][i];
@@ -293,26 +294,34 @@ for(j=0; j<100; j++)
 		//get sequence data of input array
 			gene_count(0, string_size-1, input, Y1);
 
-		//main code
-			frequency=func(data_size[0], string_size, error, frequency, input, data, Y1, Y2);
-			tmparr[n][j][0]=frequency;
-			tmparr[n][j][1]=error;
+		//main code			
+			frequency=func(out, j, data_size[0], string_size, error, frequency, input, data, Y1, Y2)[0];
+			pos0=func(out, j, data_size[0], string_size, error, frequency,input, data, Y1, Y2)[1];
+			err=func(out, j, data_size[0], string_size, error, frequency,input, data, Y1, Y2)[2];
+			fprintf(out, "%d	%.3f	%.3f\n", j+1, pos0, err);
+
+			tmprr[n][j][0]=frequency;
+			tmprr[n][j][1]=error;
+			if(frequency==0)
+			{error++;}
 		}
 	}
-
-if(frequency==0)
-{error++;}
+	fclose(out);
 }
 
+
 printf("#########################   SEARCH   #########################\n");
-error=0;
-frequency=0;
-while(frequency==0){
+
+out=fopen("plot_list_position.txt","w");
 for(j=0; j<100; j++)
 {
-	if(arr[j][0]==0){break;}
-	else
+	error=0;
+	frequency=0;
+	while(frequency==0)
 	{
+		if(arr[j][0]==0){break;}
+		else
+		{
 		for(i = 0; i < 100; i++)
 		{
 			input[i]=0;
@@ -341,28 +350,37 @@ for(j=0; j<100; j++)
 	//get sequence data of input array
 	gene_count(0, string_size-1, input, Y1);
 
-	//main code
-	frequency=func(data_size[0], string_size, error, frequency,input, data, Y1, Y2);
-	tmparr2[j][0]=frequency;
-	tmparr2[j][1]=error;
-}
+	//main code	
+	frequency=func(out, j, data_size[0], string_size, error, frequency,input, data, Y1, Y2)[0];
+	pos0=func(out, j, data_size[0], string_size, error, frequency,input, data, Y1, Y2)[1];
+	err=func(out, j, data_size[0], string_size, error, frequency,input, data, Y1, Y2)[2];
+	fprintf(out, "%d	%.3f	%.3f\n", j+1, pos0, err);
 
-if(frequency==0)
-{error++;}
+	tmprr2[j][0]=frequency;
+	tmprr2[j][1]=error;
+	
+	if(frequency==0)
+	{error++;}
+	}
 }
-	end = clock();
-	total_time = ((double) (end - start)) / CLK_TCK;
+fclose(out);
+
+end = clock();
+total_time = ((double) (end - start)) / CLK_TCK;
 
 
 //txt out file
-
-	for(n=0; n<3; n++){
+	for(n=0; n<3; n++)
+	{
 		sprintf(filename,"plot_CLS%d.txt",n+1);
 		out=fopen(filename,"w");
-		for(j=0; j<100; j++){
-			if(tmparr[n][j][0]!=0){
-				fprintf(out,"%d	%d	%d\n",j+1, tmparr[n][j][0], tmparr[n][j][1]);
-				printf("%d\n", tmparr[n][j][0]);
+
+		for(j=0; j<100; j++)
+		{
+			if(tmprr[n][j][0]!=-1)
+			{
+				fprintf(out,"%d	%d	%d\n",j+1, tmprr[n][j][0], tmprr[n][j][1]);
+				//printf("%d\n", tmprr[n][j][0]);
 			}
 		}
 		fclose(out);
@@ -371,9 +389,9 @@ if(frequency==0)
 	out=fopen("plot_list.txt","w");
 	for(j=0; j<100; j++)
 	{
-		if(tmparr2[j][0]!=0){
-			fprintf(out,"%d	%d	%d\n",j+1, tmparr2[j][0], tmparr2[j][1]);
-			printf("%d\n", tmparr[n][j][0]);
+		if(tmprr2[j][0]!=-1){
+			fprintf(out,"%d	%d	%d\n",j+1, tmprr2[j][0], tmprr2[j][1]);
+			//printf("%d\n", tmprr[n][j][0]);
 		}
 	}
 	fclose(out);
@@ -426,6 +444,8 @@ int length(char arr[])
     }
 	return length;
 }
+
+
 
 
 
@@ -482,7 +502,7 @@ void gene_count(int i, int j, char arr[], int Y[4])
 
 
 
-int func(int data_size, int string_size, int error, int frequency, char input[], char data[], int Y1[4], int Y2[4])
+float * func(FILE * out, int j, int data_size, int string_size, int error, int frequency, char input[], char data[], int Y1[4], int Y2[4])
 {
 	//'error' is number of error you expect in input string
 	//char data[] is the originial data you want to use
@@ -490,9 +510,14 @@ int func(int data_size, int string_size, int error, int frequency, char input[],
 	//Y1 & Y2 save the gene count data
 	// int data_size: size of the data
 	// int b : input string length
-	
-	int t, x, count, pos;
+	static float r[3];
+	int t, x, k, Y, count, pos;
 	int p,n;
+	float a1, pos0, err, pos1, pos2; 
+	int q1, q2;
+
+	
+
 	count=0; pos=0;
 	for(t = 0; t < data_size; t++)
 	{
@@ -518,51 +543,40 @@ int func(int data_size, int string_size, int error, int frequency, char input[],
 			}
 			if(n<=error)
 			{
-				printf("HERE IS THE POSITION : Line%4d, %2d to %2d \n", count, t-pos+1, t-pos+string_size);
-				printf("Error: %d\n",error);
+
+				printf("HERE IS THE POSITION : Line%4d, %2d to %2d, Error: %d\n", count, t-pos+1, t-pos+string_size, error);
 				frequency++;
+
+				pos0=0; q1=0; q2=0; a1=0;
+				q1=t-pos+1;
+				q2=t-pos+string_size;
+				a1=((float)(q1+q2)/200);
+				pos0=count+a1;
+				err=((float)(q2-q1)/200);
+
+				r[1]=pos0;
+				r[2]=err;
 				// break; 
 				// Can be added when you want to one position in the data.
 			}
 		}
 	}
-	return frequency;
+	r[0]=frequency;
+	return r;
 }
 
 
-
-
-
-/*================================================================================*/
-char (*datacopy(FILE* fp))[100]
+float change2decimal(float X)
 {
-	char strTemp[100]={0};
-	char *pStr;
-	char arr[100][100]={{0}};
-	int i, j;
-	if(fp != NULL)
+	float Y, k, x;
+	x=0;
+	k=1;
+	Y=X;
+	while(Y>0)
 	{
-		i=0;
-		while(!feof(fp))
-		{
-			pStr = fgets( strTemp, sizeof(strTemp), fp);
-
-			for(j = 0; j < 100; j++)
-			{
-				if(strTemp[j]!=0)
-				{
-					arr[i][j]=strTemp[j];
-				}
-				if(strTemp[j]==0)
-				{break;}
-			}
-			i+=1;
-		}
-		fclose(fp);
+		k=10*k;
+		Y=X-k;
 	}
-	else
-	{
-	   fprintf(stderr, "Error opening 'file.txt'; Bailing out!");
-	}
-	return arr;
+	x=X/k;
+	return x;
 }
