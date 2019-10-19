@@ -310,19 +310,18 @@ int main(void){
 						frequency=0;
 						if(n!=3){if(tmp[n][j][0]==0){break;}}
 						while(frequency==0){
-							if(n!=3){
-							for(i = 0; i < k; i++){input[i]=tmp[n][j][i];}
+							if(n!=3)
+							{for(i = 0; i < k; i++){input[i]=tmp[n][j][i];}
 							}
 			
-							else{
+							else
+							{
 								if(arr[j][0]==0){break;}
 								else{for(i = 0; i < 100; i++){input[i]=0;}}
 
 								for(i = 0; i < 100; i++)
-								{
-								if(arr[j][i]!=0){input[i]=arr[j][i];}
-								if(arr[j][i]==0){break;}
-								}
+								{if(arr[j][i]!=0){input[i]=arr[j][i];}
+								if(arr[j][i]==0){break;}}
 							}
 
 					//calculate input array length
