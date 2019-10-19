@@ -1,5 +1,5 @@
 /*
-Updated : September 28th
+Updated : October 18th
 Author : Youngik Lee
 code : Visual studio, C, finding the particular pattern in gene codes
 */
@@ -336,38 +336,26 @@ int main(void){
 					pos0=		func(out, j, linecount, data_size[0], string_size, error, frequency, input, arr2, Y1, Y2)[1];
 					err=		func(out, j, linecount, data_size[0], string_size, error, frequency, input, arr2, Y1, Y2)[2];
 					fprintf(out, "%d	%.3f	%.3f\n", j+1, pos0, err);
-
-
-			if(n!=3){
-			tmprr[n][j][0]=frequency;
-			tmprr[n][j][1]=error;
+							
+							if(n!=3){
+								tmprr[n][j][0]=frequency;
+								tmprr[n][j][1]=error;
+							}
+							else{	
+								tmprr2[j][0]=frequency;
+								tmprr2[j][1]=error;
+							}
+							
+							if(frequency==0){error++;}
+						}
+					}
+				}
 			}
-			else{			
-			tmprr2[j][0]=frequency;
-			tmprr2[j][1]=error;
-			}
-
-			if(frequency==0)
-			{error++;}
-			}
+			fclose(out);
 		}
-		}
-	}
-	fclose(out);
-	}
 	}
 	
-	else
-	{
-	   fprintf(stderr, "Error opening 'file.txt'; Bailing out!");
-	}
-
-
-
-
-
-
-
+	else{fprintf(stderr, "Error opening 'file.txt'; Bailing out!");}
 
 
 end = clock();
