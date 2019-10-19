@@ -43,10 +43,10 @@ int main(void){
 	int Y1[4]={0};
 	int Y2[4]={0};
 	
-	double cycle=0;
+//	double cycle=0;
 	double total_time;
 	clock_t start, end;
-	char data[500000]={0};
+//	char data[500000]={0};
 	
 	//p,p1, q,q1, w,w1, r are also data saving variables
 	char p[50000]={0};
@@ -249,11 +249,6 @@ int main(void){
 		}
 	}
 	
-//input data
-	// printf("Which pattern you want to find? : ");
-	// scanf("%s", input);
-	// printf("How many errors you expect in your pattern? : ");
-	// scanf("%d", &error);
 
 //time calculate
 	start = clock(); 
@@ -272,7 +267,8 @@ int main(void){
 			linecount++;
 			pStr2 = fgets( strTemp2, sizeof(strTemp2), ifs);
 			data_size[0]=sizeof(strTemp2);
-			if(linecount%4==2){
+			if(linecount%4==2)
+			{
 				for(l = 0; l < 100; l++)
 				{
 					if(strTemp2[l]!=0)
@@ -324,18 +320,18 @@ int main(void){
 								if(arr[j][i]==0){break;}}
 							}
 
-					//calculate input array length
-					string_size=length(input);
-					//printf("length of p : %d \n", string_size);
+							//calculate input array length
+							string_size=length(input);
+							//printf("length of p : %d \n", string_size);
 	
-					//get sequence data of input array
-					gene_count(0, string_size-1, input, Y1);
+							//get sequence data of input array
+							gene_count(0, string_size-1, input, Y1);
 
-					//main code			
-					frequency=	func(out, j, linecount, data_size[0], string_size, error, frequency, input, arr2, Y1, Y2)[0];
-					pos0=		func(out, j, linecount, data_size[0], string_size, error, frequency, input, arr2, Y1, Y2)[1];
-					err=		func(out, j, linecount, data_size[0], string_size, error, frequency, input, arr2, Y1, Y2)[2];
-					fprintf(out, "%d	%.3f	%.3f\n", j+1, pos0, err);
+							//main code			
+							frequency=func(out, j, linecount, data_size[0], string_size, error, frequency, input, arr2, Y1, Y2)[0];
+							pos0=	func(out, j, linecount, data_size[0], string_size, error, frequency, input, arr2, Y1, Y2)[1];
+							err=	func(out, j, linecount, data_size[0], string_size, error, frequency, input, arr2, Y1, Y2)[2];
+							fprintf(out, "%d	%.3f	%.3f\n", j+1, pos0, err);
 							
 							if(n!=3){
 								tmprr[n][j][0]=frequency;
@@ -347,22 +343,20 @@ int main(void){
 							}
 							
 							if(frequency==0){error++;}
-						}
-					}
-				}
-			fclose(out);
-			}
-		}
-	}
+						}//while_loop
+					}//for_j100_loop
+				fclose(out);
+				}//for_loop
+			}//linecount_modular
+		}//data_line_reading
+	}//file_open
 	
 	else{fprintf(stderr, "Error opening 'file.txt'; Bailing out!");}
 
+	end = clock();
+	total_time = ((double) (end - start)) / CLOCKS_PER_SEC;
 
-end = clock();
-total_time = ((double) (end - start)) / CLOCKS_PER_SEC;
-
-
-//txt out file
+	//txt out file
 	for(n=0; n<3; n++)
 	{
 		sprintf(filename,"plot_CLS%d.txt",n+1);
@@ -398,7 +392,7 @@ total_time = ((double) (end - start)) / CLOCKS_PER_SEC;
 // closing
     for(t = 0; t < 50000; t++)
     {
-	    data[t]=0;
+	    //data[t]=0;
 	    p[t]=0;
 	    q[t]=0;
 	    w[t]=0;
@@ -415,11 +409,13 @@ total_time = ((double) (end - start)) / CLOCKS_PER_SEC;
 	fclose(cls2);   
 	fclose(cls3); 
 	fclose(list); 
-	free(buffer);
+//	free(buffer);
 	free(buffer1);
 	free(buffer2);
 	free(buffer3);  
-	system("pause");
+
+	system("read -p 'Press Enter to continue...' var");
+//	system("pause");
     return 0;
 }
 
@@ -505,9 +501,9 @@ float * func(FILE * out, int j, int linecount, int data_size, int string_size, i
 	// int data_size: size of the data
 	// int b : input string length
 	static float r[3];
-	int t, x, k, Y, count, pos;
+	int t, x, count, pos;
 	int p,n;
-	float a1, pos0, err, pos1, pos2; 
+	float a1, pos0, err; 
 	int q1, q2;
 
 	
