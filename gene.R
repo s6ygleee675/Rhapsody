@@ -27,9 +27,9 @@ apply(X=namelist, MARGIN = 2,
 	data<-read.delim(a, header = TRUE, sep = "\t", dec = ".", col.names = c("X2", "X1", "X0"))
 	plot(x=data$X2,y=data$X1,
 	     xlab = 'line number in raw-data file',
-	     ylab = 'positions (eg. 3123.68 >> 3123th line, 68 position)',
+	     ylab = 'positions (eg. 3123.68 >> 3123th line, 68 position)', ylim =c(1350,1355),
 	     main = a)
-	arrows(data$X2, data$X1-data$X2, data$X2, data$X1+data$X2, angle=90, code=3)
+	arrows(data$X2, data$X1-data$X0, data$X2, data$X1+data$X0, angle=90, code=3)
 	}
 	)
 

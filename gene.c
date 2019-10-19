@@ -350,8 +350,8 @@ int main(void){
 						}
 					}
 				}
-			}
 			fclose(out);
+			}
 		}
 	}
 	
