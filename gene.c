@@ -96,6 +96,18 @@ int main(void){
 			}
 		}
 	}
+
+	for(n=0; n<3; n++)
+	{
+		for(j=0; j<100; j++)
+		{
+			for(i=0; i<k; i++)
+			{
+				tmp[n][j][i]=0;
+			}
+		}
+	}
+	
 	
 //open file
 	ifs = fopen("1000_from_middle.fastq","r");	
@@ -154,7 +166,7 @@ int main(void){
 		{		
 			for(i = 0; i < k; i++)
 			{
-			p1[j][i]=p[k*j+i];
+			p1[j][i]=p[(k+1)*j+i];
 			}
 		}
 
@@ -178,7 +190,7 @@ int main(void){
 		{
 			for(i = 0; i < k; i++)
 			{
-			q1[j][i]=q[k*j+i];
+			q1[j][i]=q[(k+1)*j+i];
 			}
 		}
 
@@ -189,8 +201,8 @@ int main(void){
     	size = ftell(cls3);         
     	buffer3 = malloc(size + 1);    
 		memset(buffer3, 0, size + 1);  
-    	fseek(cls3, 0, SEEK_SET);                
-    	count = fread(buffer3, size, 1, cls3);
+   	fseek(cls3, 0, SEEK_SET);                
+   	count = fread(buffer3, size, 1, cls3);
 		data_size[3]=size;
 		
 		for(x = 0; x < data_size[3]; x++)
@@ -202,10 +214,11 @@ int main(void){
 		{
 			for(i = 0; i < k; i++)
 			{
-			w1[j][i]=w[k*j+i];
+			w1[j][i]=w[(k+1)*j+i];
 			}
 		}
-		
+
+	
 
 
 //list
@@ -234,6 +247,8 @@ int main(void){
 	}
 
 
+
+
 //copy data to tmp
 	for(n=0; n<3; n++)
 	{
@@ -249,6 +264,7 @@ int main(void){
 		}
 	}
 	
+
 
 //time calculate
 	start = clock(); 
@@ -302,10 +318,11 @@ int main(void){
 	
 					for(j=0; j<100; j++)
 					{
+						for(i=0; i<100; i++){input[i]='E';}
 						error=0;
 						frequency=0;
 						if(n!=3){if(tmp[n][j][0]==0){break;}}
-						while(frequency==0){
+						while(frequency==0 && error<=2){
 							if(n!=3)
 							{for(i = 0; i < k; i++){input[i]=tmp[n][j][i];}
 							}
@@ -326,6 +343,10 @@ int main(void){
 	
 							//get sequence data of input array
 							gene_count(0, string_size-1, input, Y1);
+
+							printf("\nTHIS IS INPUT\n");
+							for(l = 0; l < 100; l++){printf("%c", input[l]);}
+							printf(" \nstring_size %d", string_size);
 
 							//main code			
 							frequency=func(out, j, linecount, data_size[0], string_size, error, frequency, input, arr2, Y1, Y2)[0];

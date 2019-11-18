@@ -28,7 +28,7 @@ apply(X=namelist, MARGIN = 2,
 	plot(x=data$X2,y=data$X1,
 	     xlab = 'line number in raw-data file',
 	     ylab = 'positions (eg. 3123.68 >> 3123th line, 68 position)', 
-	     ylim =c(3994,3999),
+	     #ylim =c(3994,3999),
 	     main = a)
 	arrows(data$X2, data$X1-data$X0, data$X2, data$X1+data$X0, angle=90, code=3)
 	}
