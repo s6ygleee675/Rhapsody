@@ -15,11 +15,11 @@ code : Visual studio, C, finding the particular pattern in gene codes
 int length(char arr[]);
 // length calculation othe arr[]
 
-void gene_count(int i, int j, char arr[], int Y[4]);
+int * gene_count(int i, int j, char arr[]);
 // arr[] sequency information from ith to jth position, Y is array which contain the maximum continued sequence number of A, T, G, C.
 //For example, it there is a code AAATCGGGC, Y[0]=3, Y[1]=1, Y[2]=3, Y[3]=1
 
-float * func(FILE * out, int j, int linecount, int data_size, int string_size, int error, int frequency, char input[], char data[], int Y1[4], int Y2[4]);
+float * func(FILE * out, int j, int linecount, int data_size, int string_size, int error, float frequency, char input[], char data[], int Y1[4], int Y2[4]);
 //main fuction, find the position of the input array on the char data[]
 
 float change2decimal(float X);
@@ -36,25 +36,17 @@ int main(void){
 
 
 	int data_size[4]={0}, string_size=0, error=0;
-	int i, j, n, l, t, x;
+	int i, j, n, l, t;
 
 	int linecount=0;
-	int k=9;
 	int Y1[4]={0};
 	int Y2[4]={0};
+	int * Y;
 	
-//	double cycle=0;
 	double total_time;
 	clock_t start, end;
-//	char data[500000]={0};
-	
-	//p,p1, q,q1, w,w1, r are also data saving variables
-	char p[50000]={0};
-	char p1[100][9] = {{0}};
-	char q[50000]={0};
-	char q1[100][9] = {{0}};
-	char w[50000]={0};
-	char w1[100][9] = {{0}};
+	float *r;
+
 	char strTemp[100]={0};
 	char *pStr;
 	char arr[100][100]={{0}};
@@ -63,30 +55,29 @@ int main(void){
 	char *pStr2;
 	char arr2[100]={0};
 
-	char tmp[3][100][9]={{{0}}};
+
+	char strTemp3[100]={0};
+	char *pStr3;
+	char arr3[100][100]={{0}};
+
+	char strTemp4[100]={0};
+	char *pStr4;
+	char arr4[100][100]={{0}};
+
+	char strTemp5[100]={0};
+	char *pStr5;
+	char arr5[100][100]={{0}};
+
+
 	char filename[100];
 	char input[100]={0};
-	char *buffer;
-	char *buffer1;
-	char *buffer2;
-	char *buffer3;
-	int size, count;
-	int frequency=0;
+	float frequency=0;
 
 	float pos0=0, err=0;
-	int tmprr[3][100][2]={{{-1}}};
-	int tmprr2[100][2]={{-1}};
+	float tmprr[4][100][2]={{{-1}}};
 
 	//initializing
-	for(j=0; j<100; j++)
-	{
-		for(i=0; i<2; i++)
-		{
-			tmprr2[j][i]=-1;
-		}
-	}
-
-	for(n=0; n<3; n++)
+	for(n=0; n<=3; n++)
 	{
 		for(j=0; j<100; j++)
 		{
@@ -97,19 +88,10 @@ int main(void){
 		}
 	}
 
-	for(n=0; n<3; n++)
-	{
-		for(j=0; j<100; j++)
-		{
-			for(i=0; i<k; i++)
-			{
-				tmp[n][j][i]=0;
-			}
-		}
-	}
-	
+
 	
 //open file
+//	ifs = fopen("7496_part1.fastq","r");	
 	ifs = fopen("1000_from_middle.fastq","r");	
 	if (ifs == NULL)
 	{
@@ -149,74 +131,85 @@ int main(void){
 //copy data from file, data copy
 
 //cls1
-    	fseek(cls1, 0, SEEK_END);
-    	size = ftell(cls1);         
-    	buffer1 = malloc(size + 1);    
-		memset(buffer1, 0, size + 1);  
-    	fseek(cls1, 0, SEEK_SET);                
-    	count = fread(buffer1, size, 1, cls1);  		
-		data_size[1]=size;
-		
-		for(x = 0; x < data_size[1]; x++)
+	if(cls1 != NULL)
+	{
+		i=0;
+		while(!feof(cls1))
 		{
-			p[x]=buffer1[x];
-		}
-		
-		for(j = 0; j < 100; j++)
-		{		
-			for(i = 0; i < k; i++)
+			pStr = fgets( strTemp3, sizeof(strTemp3), cls1);
+
+			for(j = 0; j < 100; j++)
 			{
-			p1[j][i]=p[(k+1)*j+i];
+				if(strTemp3[j]!=0)
+				{
+					arr3[i][j]=strTemp3[j];
+				}
+				if(strTemp3[j]==0)
+				{break;}
 			}
+			i+=1;
 		}
+	}
+	else
+	{
+	   fprintf(stderr, "Error opening 'file.txt'; Bailing out!");
+	}
+
 
 
 
 //cls2
-    	fseek(cls2, 0, SEEK_END);
-    	size = ftell(cls2);         
-    	buffer2 = malloc(size + 1);    
-		memset(buffer2, 0, size + 1);  
-    	fseek(cls2, 0, SEEK_SET);                
-    	count = fread(buffer2, size, 1, cls2);  
-		data_size[2]=size;
-		
-		for(x = 0; x < data_size[2]; x++)
+	if(cls2 != NULL)
+	{
+		i=0;
+		while(!feof(cls2))
 		{
-			q[x]=buffer2[x];
-		}
-		
-		for(j = 0; j < 100; j++)
-		{
-			for(i = 0; i < k; i++)
+			pStr = fgets( strTemp4, sizeof(strTemp4), cls2);
+
+			for(j = 0; j < 100; j++)
 			{
-			q1[j][i]=q[(k+1)*j+i];
+				if(strTemp4[j]!=0)
+				{
+					arr4[i][j]=strTemp4[j];
+				}
+				if(strTemp4[j]==0)
+				{break;}
 			}
+			i+=1;
 		}
+	}
+	else
+	{
+	   fprintf(stderr, "Error opening 'file.txt'; Bailing out!");
+	}
+
 
 
 
 //cls3
-    	fseek(cls3, 0, SEEK_END);
-    	size = ftell(cls3);         
-    	buffer3 = malloc(size + 1);    
-		memset(buffer3, 0, size + 1);  
-   	fseek(cls3, 0, SEEK_SET);                
-   	count = fread(buffer3, size, 1, cls3);
-		data_size[3]=size;
-		
-		for(x = 0; x < data_size[3]; x++)
+	if(cls3 != NULL)
+	{
+		i=0;
+		while(!feof(cls3))
 		{
-			w[x]=buffer3[x];
-		}
-		
-		for(j = 0; j < 100; j++)
-		{
-			for(i = 0; i < k; i++)
+			pStr = fgets( strTemp5, sizeof(strTemp5), cls3);
+
+			for(j = 0; j < 100; j++)
 			{
-			w1[j][i]=w[(k+1)*j+i];
+				if(strTemp5[j]!=0)
+				{
+					arr5[i][j]=strTemp5[j];
+				}
+				if(strTemp5[j]==0)
+				{break;}
 			}
+			i+=1;
 		}
+	}
+	else
+	{
+	   fprintf(stderr, "Error opening 'file.txt'; Bailing out!");
+	}
 
 	
 
@@ -249,20 +242,6 @@ int main(void){
 
 
 
-//copy data to tmp
-	for(n=0; n<3; n++)
-	{
-		for(j=0; j<100; j++)
-		{
-			for(i = 0; i < k; i++)
-			{
-				if (n==0){tmp[n][j][i]=p1[j][i];}
-				if (n==1){tmp[n][j][i]=q1[j][i];}
-				if (n==2){tmp[n][j][i]=w1[j][i];}
-
-			}
-		}
-	}
 	
 
 
@@ -295,12 +274,6 @@ int main(void){
 					{break;}
 				}
 			
-				for(l = 0; l < 100; l++)
-				{
-					if(arr2[l]=='E'){break;}
-					else{printf("%c", arr2[l]);}
-				}
-
 				for(n=0; n<=3; n++)
 				{
 					if(n!=3){
@@ -311,63 +284,92 @@ int main(void){
 					}
 		
 					else{
-					printf("#########################   SEARCH   #########################\n");
+					printf("#########################   SEARCH   ##########################\n");
 					out=fopen("plot_list_position.txt","w");
 					fprintf(out,"#	#	#\n");
 					}
 	
 					for(j=0; j<100; j++)
 					{
-						for(i=0; i<100; i++){input[i]='E';}
 						error=0;
 						frequency=0;
-						if(n!=3){if(tmp[n][j][0]==0){break;}}
 						while(frequency==0 && error<=2){
-							if(n!=3)
-							{for(i = 0; i < k; i++){input[i]=tmp[n][j][i];}
-							}
 			
-							else
-							{
-								if(arr[j][0]==0){break;}
-								else{for(i = 0; i < 100; i++){input[i]=0;}}
+						if(n==0){
+							if(arr3[j][0]==0){break;}
+							else{for(i = 0; i < 100; i++){input[i]=0;}}
 
-								for(i = 0; i < 100; i++)
-								{if(arr[j][i]!=0){input[i]=arr[j][i];}
-								if(arr[j][i]==0){break;}}
+							for(i = 0; i < 100; i++)
+							{if(arr3[j][i]!=0){input[i]=arr3[j][i];}
+							if(arr3[j][i]==0){break;}}
 							}
+						if(n==1){
+							if(arr4[j][0]==0){break;}
+							else{for(i = 0; i < 100; i++){input[i]=0;}}
 
+							for(i = 0; i < 100; i++)
+							{if(arr4[j][i]!=0){input[i]=arr4[j][i];}
+							if(arr4[j][i]==0){break;}}
+							}
+						if(n==2){
+							if(arr5[j][0]==0){break;}
+							else{for(i = 0; i < 100; i++){input[i]=0;}}
+
+							for(i = 0; i < 100; i++)
+							{if(arr5[j][i]!=0){input[i]=arr5[j][i];}
+							if(arr5[j][i]==0){break;}}
+							}
+						if(n==3){
+							if(arr[j][0]==0){break;}
+							else{for(i = 0; i < 100; i++){input[i]=0;}}
+
+							for(i = 0; i < 100; i++)
+							{if(arr[j][i]!=0){input[i]=arr[j][i];}
+							if(arr[j][i]==0){break;}}
+							}
+	
 							//calculate input array length
 							string_size=length(input);
 							//printf("length of p : %d \n", string_size);
 	
 							//get sequence data of input array
-							gene_count(0, string_size-1, input, Y1);
+							Y = gene_count(0, string_size-1, input);
 
-							printf("\nTHIS IS INPUT\n");
-							for(l = 0; l < 100; l++){printf("%c", input[l]);}
-							printf(" \nstring_size %d", string_size);
+							for(l = 0; l < 4; l++)
+							{
+								Y1[l]=*(Y+l);
+							}
 
-							//main code			
-							frequency=func(out, j, linecount, data_size[0], string_size, error, frequency, input, arr2, Y1, Y2)[0];
-							pos0=	func(out, j, linecount, data_size[0], string_size, error, frequency, input, arr2, Y1, Y2)[1];
-							err=	func(out, j, linecount, data_size[0], string_size, error, frequency, input, arr2, Y1, Y2)[2];
-							fprintf(out, "%d	%.3f	%.3f\n", j+1, pos0, err);
+
+							//printf("\nTHIS IS INPUT\n");
+							//for(l = 0; l < 100; l++){printf("%c", input[l]);}
+							//printf(" \nstring_size %d", string_size-1);
+
+
+							//printf("\nTHIS IS DATA\n");		
+							//for(l = 0; l < 100; l++)
+							//{
+							//	if(arr2[l]=='E'){break;}
+							//	else{printf("%c", arr2[l]);}
+							//}
+
+					//main code
+					r=func(out, j, linecount, data_size[0]-1, string_size, error, frequency, input, arr2, Y1, Y2);
+								
+					frequency=*r;
+					pos0=	  *(r+1);
+					err=	  *(r+2);
+					fprintf(out, "%d	%.3f	%.3f\n", j+1, pos0, err);
 							
-							if(n!=3){
-								tmprr[n][j][0]=frequency;
-								tmprr[n][j][1]=error;
-							}
-							else{	
-								tmprr2[j][0]=frequency;
-								tmprr2[j][1]=error;
-							}
-							
+					
+								tmprr[n][j][0]=tmprr[n][j][0]+frequency;
+								tmprr[n][j][1]=error-1;
+												
 							if(frequency==0){error++;}
 						}//while_loop
 					}//for_j100_loop
 				fclose(out);
-				}//for_loop
+				}//for_n_loop
 			}//linecount_modular
 		}//data_line_reading
 	}//file_open
@@ -378,8 +380,9 @@ int main(void){
 	total_time = ((double) (end - start)) / CLOCKS_PER_SEC;
 
 	//txt out file
-	for(n=0; n<3; n++)
+	for(n=0; n<=3; n++)
 	{
+		if(n!=3){
 		sprintf(filename,"plot_CLS%d.txt",n+1);
 		out=fopen(filename,"w");
 		fprintf(out,"#	#	#\n");
@@ -388,55 +391,43 @@ int main(void){
 		{
 			if(tmprr[n][j][0]!=-1)
 			{
-				fprintf(out,"%d	%d	%d\n",j+1, tmprr[n][j][0], tmprr[n][j][1]);
+				fprintf(out,"%d	%f	%f\n",j+1, tmprr[n][j][0], tmprr[n][j][1]);
 				//printf("%d\n", tmprr[n][j][0]);
 			}
 		}
 		fclose(out);
-	}
+		}
 
-	out=fopen("plot_list.txt","w");
-	fprintf(out,"#	#	#\n");
-	for(j=0; j<100; j++)
-	{
-		if(tmprr2[j][0]!=-1){
-			fprintf(out,"%d	%d	%d\n",j+1, tmprr2[j][0], tmprr2[j][1]);
-			//printf("%d\n", tmprr[n][j][0]);
+		else{
+		out=fopen("plot_list.txt","w");
+		fprintf(out,"#	#	#\n");
+		for(j=0; j<100; j++)
+		{
+			if(tmprr[n][j][0]!=-1){
+				fprintf(out,"%d	%f	%f\n",j+1, tmprr[n][j][0], tmprr[n][j][1]);
+				//printf("%d\n", tmprr[n][j][0]);
+			}
+		}
+		fclose(out);
 		}
 	}
-	fclose(out);
+
 
 //print result
 	printf("Time taken to analyze : %f \n", total_time);
 	
-
-// closing
-    for(t = 0; t < 50000; t++)
-    {
-	    //data[t]=0;
-	    p[t]=0;
-	    q[t]=0;
-	    w[t]=0;
-    }
-
 	for(t = 0; t < 4; t++)
-    {
+    	{
 		Y1[t]=0;
 		Y2[t]=0;
-    }
+	}
 
 	fclose(ifs);   
 	fclose(cls1);   
 	fclose(cls2);   
 	fclose(cls3); 
 	fclose(list); 
-//	free(buffer);
-	free(buffer1);
-	free(buffer2);
-	free(buffer3);  
-
 	system("read -p 'Press Enter to continue...' var");
-//	system("pause");
     return 0;
 }
 
@@ -448,11 +439,11 @@ int length(char arr[])
 {
 	int t, length=0;
 	for(t = 0; t < 100; t++)
-    {
+	{
 	    if(arr[t]==0)
 			{length = t;
 		break;}
-    }
+	}
 	return length;
 }
 
@@ -460,9 +451,11 @@ int length(char arr[])
 
 
 
-void gene_count(int i, int j, char arr[], int Y[4])
+int * gene_count(int i, int j, char arr[])
 {
 	int a=0, t=0, g=0, c=0, k;
+	static int Y[4];
+
 	for(k = 0; k < 4; k++)
     {
 		Y[t]=0;
@@ -500,20 +493,21 @@ void gene_count(int i, int j, char arr[], int Y[4])
 		else
 		{
 			a=1; t=1; g=1; c=1;
-			if(arr[k]=='A' && 1>Y[0])		Y[0]=1;
-			if(arr[k]=='T' && 1>Y[1])		Y[1]=1;
-			if(arr[k]=='G' && 1>Y[2]) 	    Y[2]=1;
-			if(arr[k]=='C' && 1>Y[3])		Y[3]=1;
+			if(arr[k]=='A' && 1>Y[0])	Y[0]=1;
+			if(arr[k]=='T' && 1>Y[1])	Y[1]=1;
+			if(arr[k]=='G' && 1>Y[2]) 	Y[2]=1;
+			if(arr[k]=='C' && 1>Y[3])	Y[3]=1;
 
 		}
 	}
+return Y;
 }
 
 
 
 
 
-float * func(FILE * out, int j, int linecount, int data_size, int string_size, int error, int frequency, char input[], char data[], int Y1[4], int Y2[4])
+float * func(FILE * out, int j, int linecount, int data_size, int string_size, int error, float frequency, char input[], char data[], int Y1[4], int Y2[4])
 {
 	// 'error' is number of error you expect in input string
 	// char data[] is the originial data you want to use
@@ -522,23 +516,29 @@ float * func(FILE * out, int j, int linecount, int data_size, int string_size, i
 	// int data_size: size of the data
 	// int b : input string length
 	static float r[3];
-	int t, x, count, pos;
-	int p,n;
+	static int * Y;
+	int t, x, count, pos, l;
+	int p, n, ntmp;
 	float a1, pos0, err; 
 	int q1, q2;
-
+	static float freq;
 	
-
+	freq=frequency;
 	count=0; pos=0;
-	for(t = 0; t < data_size; t++)
+	for(t = 0; t < data_size-string_size; t++)
 	{
 		if(data[t]=='\n')
 		{
 			count++;
 			pos=t;
 		}
-		p=0; n=0;
-		gene_count(t, t+string_size-1, data, Y2);
+		p=0; n=0; ntmp=0;
+		Y = gene_count(t, t+string_size-1, data);
+		for(l = 0; l < 4; l++)
+		{
+			Y2[l]=*(Y+l);
+		}
+
 		for(x = 0; x < 4; x++)
 		{
 			p+=abs(Y1[x]-Y2[x]);
@@ -549,13 +549,13 @@ float * func(FILE * out, int j, int linecount, int data_size, int string_size, i
 		{
 			for(x = 0; x < string_size; x++)
 			{
-				if(input[x]!=data[t+x])
-					n++;
+				if(input[x]==data[t+x])
+					ntmp++;
 			}
-			if(n<=error)
+			if((string_size-ntmp)<=error)
 			{
-				printf("HERE IS THE POSITION : Line%4d, %2d to %2d, Error: %d\n", linecount, t-pos+1, t-pos+string_size, error);
-				frequency++;
+				printf("HERE IS THE POSITION : Line%4d, %2d to %2d, Error: %d\n", linecount, t-pos+1, t-pos+string_size, error-1);
+				freq++;
 
 				pos0=0; q1=0; q2=0; a1=0;
 				q1=t-pos+1;
@@ -569,7 +569,7 @@ float * func(FILE * out, int j, int linecount, int data_size, int string_size, i
 			}
 		}
 	}
-	r[0]=frequency;
+	r[0]=freq;
 	return r;
 }
 
