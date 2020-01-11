@@ -1,5 +1,5 @@
 /*
-Updated : October 18th
+Updated : January 21th
 Author : Youngik Lee
 code : Visual studio, C, finding the particular pattern in gene codes
 */
@@ -22,7 +22,6 @@ int * gene_count(int i, int j, char arr[]);
 float * func(FILE * out, int j, int linecount, int data_size, int string_size, int error, float frequency, char input[], char data[], int Y1[4], int Y2[4]);
 //main fuction, find the position of the input array on the char data[]
 
-float change2decimal(float X);
 
 
 int main(void){
@@ -38,6 +37,7 @@ int main(void){
 	int data_size[4]={0}, string_size=0, error=0;
 	int i, j, n, l, t;
 
+	//Y is array for record the number of the frequency of Nucleobase(A, T, G, C)
 	int linecount=0;
 	int Y1[4]={0};
 	int Y2[4]={0};
@@ -54,7 +54,6 @@ int main(void){
 	char strTemp2[100]={0};
 	char *pStr2;
 	char arr2[100]={0};
-
 
 	char strTemp3[100]={0};
 	char *pStr3;
@@ -91,8 +90,8 @@ int main(void){
 
 	
 //open file
-//	ifs = fopen("7496_part1.fastq","r");	
-	ifs = fopen("1000_from_middle.fastq","r");	
+	ifs = fopen("7496_part1.fastq","r");	
+//	ifs = fopen("1000_from_middle.fastq","r");	
 	if (ifs == NULL)
 	{
 		printf("Cannot open the file.\n");
@@ -156,8 +155,6 @@ int main(void){
 	}
 
 
-
-
 //cls2
 	if(cls2 != NULL)
 	{
@@ -182,8 +179,6 @@ int main(void){
 	{
 	   fprintf(stderr, "Error opening 'file.txt'; Bailing out!");
 	}
-
-
 
 
 //cls3
@@ -211,8 +206,6 @@ int main(void){
 	   fprintf(stderr, "Error opening 'file.txt'; Bailing out!");
 	}
 
-	
-
 
 //list
 	if(list != NULL)
@@ -238,11 +231,6 @@ int main(void){
 	{
 	   fprintf(stderr, "Error opening 'file.txt'; Bailing out!");
 	}
-
-
-
-
-	
 
 
 //time calculate
@@ -330,7 +318,6 @@ int main(void){
 	
 							//calculate input array length
 							string_size=length(input);
-							//printf("length of p : %d \n", string_size);
 	
 							//get sequence data of input array
 							Y = gene_count(0, string_size-1, input);
@@ -340,18 +327,6 @@ int main(void){
 								Y1[l]=*(Y+l);
 							}
 
-
-							//printf("\nTHIS IS INPUT\n");
-							//for(l = 0; l < 100; l++){printf("%c", input[l]);}
-							//printf(" \nstring_size %d", string_size-1);
-
-
-							//printf("\nTHIS IS DATA\n");		
-							//for(l = 0; l < 100; l++)
-							//{
-							//	if(arr2[l]=='E'){break;}
-							//	else{printf("%c", arr2[l]);}
-							//}
 
 					//main code
 					r=func(out, j, linecount, data_size[0]-1, string_size, error, frequency, input, arr2, Y1, Y2);
@@ -571,20 +546,4 @@ float * func(FILE * out, int j, int linecount, int data_size, int string_size, i
 	}
 	r[0]=freq;
 	return r;
-}
-
-
-float change2decimal(float X)
-{
-	float Y, k, x;
-	x=0;
-	k=1;
-	Y=X;
-	while(Y>0)
-	{
-		k=10*k;
-		Y=X-k;
-	}
-	x=X/k;
-	return x;
 }
