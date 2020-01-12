@@ -33,7 +33,6 @@ int main(void){
 	FILE * list;
 	FILE * out;
 
-
 	int data_size[4]={0}, string_size=0, error=0;
 	int i, j, n, l, t;
 
@@ -45,7 +44,7 @@ int main(void){
 	
 	double total_time;
 	clock_t start, end;
-	float *r;
+	float *output_result;
 
 	char strTemp[100]={0};
 	char *pStr;
@@ -53,19 +52,19 @@ int main(void){
 
 	char strTemp2[100]={0};
 	char *pStr2;
-	char arr2[100]={0};
+	char extract_data_line[100]={0};
 
 	char strTemp3[100]={0};
 	char *pStr3;
-	char arr3[100][100]={{0}};
+	char cls1_data[100][100]={{0}};
 
 	char strTemp4[100]={0};
 	char *pStr4;
-	char arr4[100][100]={{0}};
+	char cls2_data[100][100]={{0}};
 
 	char strTemp5[100]={0};
 	char *pStr5;
-	char arr5[100][100]={{0}};
+	char cls3_data[100][100]={{0}};
 
 
 	char filename[100];
@@ -73,7 +72,7 @@ int main(void){
 	float frequency=0;
 
 	float pos0=0, err=0;
-	float tmprr[4][100][2]={{{-1}}};
+	float output[4][100][2]={{{-1}}};
 
 	//initializing
 	for(n=0; n<=3; n++)
@@ -82,7 +81,7 @@ int main(void){
 		{
 			for(i=0; i<2; i++)
 			{
-				tmprr[n][j][i]=-1;
+				output[n][j][i]=-1;
 			}
 		}
 	}
@@ -141,7 +140,7 @@ int main(void){
 			{
 				if(strTemp3[j]!=0)
 				{
-					arr3[i][j]=strTemp3[j];
+					cls1_data[i][j]=strTemp3[j];
 				}
 				if(strTemp3[j]==0)
 				{break;}
@@ -151,7 +150,7 @@ int main(void){
 	}
 	else
 	{
-	   fprintf(stderr, "Error opening 'file.txt'; Bailing out!");
+	   fprintf(stderr, "Error opening 'cls1.txt'; Bailing out!");
 	}
 
 
@@ -167,7 +166,7 @@ int main(void){
 			{
 				if(strTemp4[j]!=0)
 				{
-					arr4[i][j]=strTemp4[j];
+					cls2_data[i][j]=strTemp4[j];
 				}
 				if(strTemp4[j]==0)
 				{break;}
@@ -177,7 +176,7 @@ int main(void){
 	}
 	else
 	{
-	   fprintf(stderr, "Error opening 'file.txt'; Bailing out!");
+	   fprintf(stderr, "Error opening 'cls2.txt'; Bailing out!");
 	}
 
 
@@ -193,7 +192,7 @@ int main(void){
 			{
 				if(strTemp5[j]!=0)
 				{
-					arr5[i][j]=strTemp5[j];
+					cls3_data[i][j]=strTemp5[j];
 				}
 				if(strTemp5[j]==0)
 				{break;}
@@ -203,11 +202,11 @@ int main(void){
 	}
 	else
 	{
-	   fprintf(stderr, "Error opening 'file.txt'; Bailing out!");
+	   fprintf(stderr, "Error opening 'cls3.txt'; Bailing out!");
 	}
 
 
-//list
+//list (the base code list for the sequence which want to detect on the data)
 	if(list != NULL)
 	{
 		i=0;
@@ -229,7 +228,7 @@ int main(void){
 	}
 	else
 	{
-	   fprintf(stderr, "Error opening 'file.txt'; Bailing out!");
+	   fprintf(stderr, "Error opening 'list.txt'; Bailing out!");
 	}
 
 
@@ -237,10 +236,11 @@ int main(void){
 	start = clock(); 
 	srand(time(NULL));
 
+	//initailizing
 	linecount=0;
 	for(l = 0; l < 100; l++)
 	{
-		arr2[l]='E';
+		extract_data_line[l]='E';
 	}
 
 	if(ifs != NULL)
@@ -256,7 +256,7 @@ int main(void){
 				{
 					if(strTemp2[l]!=0)
 					{
-						arr2[l]=strTemp2[l];
+						extract_data_line[l]=strTemp2[l];
 					}
 					if(strTemp2[l]==0)
 					{break;}
@@ -284,63 +284,65 @@ int main(void){
 						while(frequency==0 && error<=2){
 			
 						if(n==0){
-							if(arr3[j][0]==0){break;}
+							//initialization
+							if(cls1_data[j][0]==0){break;}
 							else{for(i = 0; i < 100; i++){input[i]=0;}}
 
 							for(i = 0; i < 100; i++)
-							{if(arr3[j][i]!=0){input[i]=arr3[j][i];}
-							if(arr3[j][i]==0){break;}}
-							}
+							{if(cls1_data[j][i]!=0){input[i]=cls1_data[j][i];}
+							if(cls1_data[j][i]==0){break;}}
+						}
 						if(n==1){
-							if(arr4[j][0]==0){break;}
+							//initialization
+							if(cls2_data[j][0]==0){break;}
 							else{for(i = 0; i < 100; i++){input[i]=0;}}
 
 							for(i = 0; i < 100; i++)
-							{if(arr4[j][i]!=0){input[i]=arr4[j][i];}
-							if(arr4[j][i]==0){break;}}
-							}
+							{if(cls2_data[j][i]!=0){input[i]=cls2_data[j][i];}
+							if(cls2_data[j][i]==0){break;}}
+						}
 						if(n==2){
-							if(arr5[j][0]==0){break;}
+							//initialization
+							if(cls3_data[j][0]==0){break;}
 							else{for(i = 0; i < 100; i++){input[i]=0;}}
 
 							for(i = 0; i < 100; i++)
-							{if(arr5[j][i]!=0){input[i]=arr5[j][i];}
-							if(arr5[j][i]==0){break;}}
-							}
+							{if(cls3_data[j][i]!=0){input[i]=cls3_data[j][i];}
+							if(cls3_data[j][i]==0){break;}}
+						}
 						if(n==3){
+							//initialization
 							if(arr[j][0]==0){break;}
 							else{for(i = 0; i < 100; i++){input[i]=0;}}
 
 							for(i = 0; i < 100; i++)
 							{if(arr[j][i]!=0){input[i]=arr[j][i];}
 							if(arr[j][i]==0){break;}}
-							}
+						}
 	
-							//calculate input array length
-							string_size=length(input);
+						//calculate input array length
+						string_size=length(input);
 	
-							//get sequence data of input array
-							Y = gene_count(0, string_size-1, input);
+						//get sequence data of input array
+						Y = gene_count(0, string_size-1, input);
 
-							for(l = 0; l < 4; l++)
-							{
-								Y1[l]=*(Y+l);
-							}
+						//data copy from pointer to array
+						for(l = 0; l < 4; l++)
+						{
+							Y1[l]=*(Y+l);
+						}
 
-
-					//main code
-					r=func(out, j, linecount, data_size[0]-1, string_size, error, frequency, input, arr2, Y1, Y2);
-								
-					frequency=*r;
-					pos0=	  *(r+1);
-					err=	  *(r+2);
-					fprintf(out, "%d	%.3f	%.3f\n", j+1, pos0, err);
-							
-					
-								tmprr[n][j][0]=tmprr[n][j][0]+frequency;
-								tmprr[n][j][1]=error-1;
+						//main code
+						output_result=func(out, j, linecount, data_size[0]-1, string_size, error, frequency, input, extract_data_line, Y1, Y2);
+						frequency=*output_result;
+						pos0=	  *(output_result+1);
+						err=	  *(output_result+2);
+						fprintf(out, "%d	%.3f	%.3f\n", j+1, pos0, err);
+											
+						output[n][j][0]=output[n][j][0]+frequency;
+						output[n][j][1]=error-1;
 												
-							if(frequency==0){error++;}
+						if(frequency==0){error++;}
 						}//while_loop
 					}//for_j100_loop
 				fclose(out);
@@ -364,10 +366,10 @@ int main(void){
 
 		for(j=0; j<100; j++)
 		{
-			if(tmprr[n][j][0]!=-1)
+			if(output[n][j][0]!=-1)
 			{
-				fprintf(out,"%d	%f	%f\n",j+1, tmprr[n][j][0], tmprr[n][j][1]);
-				//printf("%d\n", tmprr[n][j][0]);
+				fprintf(out,"%d	%f	%f\n",j+1, output[n][j][0], output[n][j][1]);
+				//printf("%d\n", output[n][j][0]);
 			}
 		}
 		fclose(out);
@@ -378,9 +380,9 @@ int main(void){
 		fprintf(out,"#	#	#\n");
 		for(j=0; j<100; j++)
 		{
-			if(tmprr[n][j][0]!=-1){
-				fprintf(out,"%d	%f	%f\n",j+1, tmprr[n][j][0], tmprr[n][j][1]);
-				//printf("%d\n", tmprr[n][j][0]);
+			if(output[n][j][0]!=-1){
+				fprintf(out,"%d	%f	%f\n",j+1, output[n][j][0], output[n][j][1]);
+				//printf("%d\n", output[n][j][0]);
 			}
 		}
 		fclose(out);
@@ -490,7 +492,7 @@ float * func(FILE * out, int j, int linecount, int data_size, int string_size, i
 	// Y1 & Y2 save the gene count data
 	// int data_size: size of the data
 	// int b : input string length
-	static float r[3];
+	static float output_result[3];
 	static int * Y;
 	int t, x, count, pos, l;
 	int p, n, ntmp;
@@ -539,11 +541,11 @@ float * func(FILE * out, int j, int linecount, int data_size, int string_size, i
 				pos0=linecount+a1;
 				err=((float)(q2-q1)/200);
 
-				r[1]=pos0;
-				r[2]=err;
+				output_result[1]=pos0;
+				output_result[2]=err;
 			}
 		}
 	}
-	r[0]=freq;
-	return r;
+	output_result[0]=freq;
+	return output_result;
 }
