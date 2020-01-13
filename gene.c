@@ -46,24 +46,25 @@ int main(void){
 	clock_t start, end;
 	float *output_result;
 
+
 	char strTemp[100]={0};
 	char *pStr;
-	char arr[100][100]={{0}};
-
-	char strTemp2[100]={0};
-	char *pStr2;
 	char extract_data_line[100]={0};
 
-	char strTemp3[100]={0};
-	char *pStr3;
+	char list_Temp[100]={0};
+	char *list_pointer;
+	char list_data[100][100]={{0}};
+
+	char cls1_Temp[100]={0};
+	char *cls1_pointer;
 	char cls1_data[100][100]={{0}};
 
-	char strTemp4[100]={0};
-	char *pStr4;
+	char cls2_Temp[100]={0};
+	char *cls2_pointer;
 	char cls2_data[100][100]={{0}};
 
-	char strTemp5[100]={0};
-	char *pStr5;
+	char cls3_Temp[100]={0};
+	char *cls3_pointer;
 	char cls3_data[100][100]={{0}};
 
 
@@ -134,15 +135,15 @@ int main(void){
 		i=0;
 		while(!feof(cls1))
 		{
-			pStr = fgets( strTemp3, sizeof(strTemp3), cls1);
+			cls1_pointer = fgets( cls1_Temp, sizeof(cls1_Temp), cls1);
 
 			for(j = 0; j < 100; j++)
 			{
-				if(strTemp3[j]!=0)
+				if(cls1_Temp[j]!=0)
 				{
-					cls1_data[i][j]=strTemp3[j];
+					cls1_data[i][j]=cls1_Temp[j];
 				}
-				if(strTemp3[j]==0)
+				if(cls1_Temp[j]==0)
 				{break;}
 			}
 			i+=1;
@@ -160,15 +161,15 @@ int main(void){
 		i=0;
 		while(!feof(cls2))
 		{
-			pStr = fgets( strTemp4, sizeof(strTemp4), cls2);
+			cls2_pointer = fgets( cls2_Temp, sizeof(cls2_Temp), cls2);
 
 			for(j = 0; j < 100; j++)
 			{
-				if(strTemp4[j]!=0)
+				if(cls2_Temp[j]!=0)
 				{
-					cls2_data[i][j]=strTemp4[j];
+					cls2_data[i][j]=cls2_Temp[j];
 				}
-				if(strTemp4[j]==0)
+				if(cls2_Temp[j]==0)
 				{break;}
 			}
 			i+=1;
@@ -186,15 +187,15 @@ int main(void){
 		i=0;
 		while(!feof(cls3))
 		{
-			pStr = fgets( strTemp5, sizeof(strTemp5), cls3);
+			cls3_pointer = fgets( cls3_Temp, sizeof(cls3_Temp), cls3);
 
 			for(j = 0; j < 100; j++)
 			{
-				if(strTemp5[j]!=0)
+				if(cls3_Temp[j]!=0)
 				{
-					cls3_data[i][j]=strTemp5[j];
+					cls3_data[i][j]=cls3_Temp[j];
 				}
-				if(strTemp5[j]==0)
+				if(cls3_Temp[j]==0)
 				{break;}
 			}
 			i+=1;
@@ -212,15 +213,15 @@ int main(void){
 		i=0;
 		while(!feof(list))
 		{
-			pStr = fgets( strTemp, sizeof(strTemp), list);
+			list_pointer = fgets( list_Temp, sizeof(list_Temp), list);
 
 			for(j = 0; j < 100; j++)
 			{
-				if(strTemp[j]!=0)
+				if(list_Temp[j]!=0)
 				{
-					arr[i][j]=strTemp[j];
+					list_data[i][j]=list_Temp[j];
 				}
-				if(strTemp[j]==0)
+				if(list_Temp[j]==0)
 				{break;}
 			}
 			i+=1;
@@ -248,17 +249,17 @@ int main(void){
 		while(!feof(ifs))
 		{
 			linecount++;
-			pStr2 = fgets( strTemp2, sizeof(strTemp2), ifs);
-			data_size[0]=sizeof(strTemp2);
+			pStr = fgets( strTemp, sizeof(strTemp), ifs);
+			data_size[0]=sizeof(strTemp);
 			if(linecount%4==2)
 			{
 				for(l = 0; l < 100; l++)
 				{
-					if(strTemp2[l]!=0)
+					if(strTemp[l]!=0)
 					{
-						extract_data_line[l]=strTemp2[l];
+						extract_data_line[l]=strTemp[l];
 					}
-					if(strTemp2[l]==0)
+					if(strTemp[l]==0)
 					{break;}
 				}
 			
@@ -312,12 +313,12 @@ int main(void){
 						}
 						if(n==3){
 							//initialization
-							if(arr[j][0]==0){break;}
+							if(list_data[j][0]==0){break;}
 							else{for(i = 0; i < 100; i++){input[i]=0;}}
 
 							for(i = 0; i < 100; i++)
-							{if(arr[j][i]!=0){input[i]=arr[j][i];}
-							if(arr[j][i]==0){break;}}
+							{if(list_data[j][i]!=0){input[i]=list_data[j][i];}
+							if(list_data[j][i]==0){break;}}
 						}
 	
 						//calculate input array length
