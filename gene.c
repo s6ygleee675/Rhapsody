@@ -46,7 +46,6 @@ int main(void){
 	clock_t start, end;
 	float *output_result;
 
-
 	char strTemp[100]={0};
 	char *pStr;
 	char extract_data_line[100]={0};
@@ -66,7 +65,6 @@ int main(void){
 	char cls3_Temp[100]={0};
 	char *cls3_pointer;
 	char cls3_data[100][100]={{0}};
-
 
 	char filename[100];
 	char input[100]={0};
@@ -90,8 +88,8 @@ int main(void){
 
 	
 //open file
-	ifs = fopen("7496_part1.fastq","r");	
-//	ifs = fopen("1000_from_middle.fastq","r");	
+//	ifs = fopen("7496_part1.fastq","r");	
+	ifs = fopen("1000_from_middle.fastq","r");	
 	if (ifs == NULL)
 	{
 		printf("Cannot open the file.\n");
@@ -269,13 +267,13 @@ int main(void){
 					printf("#########################    CLS%d    ##########################\n",n+1);
 					sprintf(filename,"plot_CLS%d_position.txt",n+1);
 					out=fopen(filename,"w");
-					fprintf(out,"#	#	#\n");
+					fprintf(out,"#	#position	#input_code_size\n");
 					}
 		
 					else{
 					printf("#########################   SEARCH   ##########################\n");
 					out=fopen("plot_list_position.txt","w");
-					fprintf(out,"#	#	#\n");
+					fprintf(out,"#	#position	#input_code_size\n");
 					}
 	
 					for(j=0; j<100; j++)
@@ -341,7 +339,7 @@ int main(void){
 						fprintf(out, "%d	%.3f	%.3f\n", j+1, pos0, err);
 											
 						output[n][j][0]=output[n][j][0]+frequency;
-						output[n][j][1]=error-1;
+						output[n][j][1]=error;
 												
 						if(frequency==0){error++;}
 						}//while_loop
@@ -363,7 +361,7 @@ int main(void){
 		if(n!=3){
 		sprintf(filename,"plot_CLS%d.txt",n+1);
 		out=fopen(filename,"w");
-		fprintf(out,"#	#	#\n");
+		fprintf(out,"#	#frequency	#error\n");
 
 		for(j=0; j<100; j++)
 		{
@@ -378,7 +376,7 @@ int main(void){
 
 		else{
 		out=fopen("plot_list.txt","w");
-		fprintf(out,"#	#	#\n");
+		fprintf(out,"#	#frequency	#error\n");
 		for(j=0; j<100; j++)
 		{
 			if(output[n][j][0]!=-1){
@@ -412,7 +410,7 @@ int main(void){
 
 
 
-/*================================================================================*/
+//function define
 int length(char arr[])
 {
 	int t, length=0;
@@ -424,8 +422,6 @@ int length(char arr[])
 	}
 	return length;
 }
-
-
 
 
 
@@ -483,8 +479,6 @@ return Y;
 
 
 
-
-
 float * func(FILE * out, int j, int linecount, int data_size, int string_size, int error, float frequency, char input[], char data[], int Y1[4], int Y2[4])
 {
 	// 'error' is number of error you expect in input string
@@ -532,7 +526,7 @@ float * func(FILE * out, int j, int linecount, int data_size, int string_size, i
 			}
 			if((string_size-ntmp)<=error)
 			{
-				printf("HERE IS THE POSITION : Line%4d, %2d to %2d, Error: %d\n", linecount, t-pos+1, t-pos+string_size, error-1);
+				printf("HERE IS THE POSITION : Line%4d, %2d to %2d, Error: %d\n", linecount, t-pos+1, t-pos+string_size, error);
 				freq++;
 
 				pos0=0; q1=0; q2=0; a1=0;
