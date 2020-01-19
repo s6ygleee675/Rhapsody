@@ -1,4 +1,6 @@
 library(ggplot2)
+
+#frequency, error graph
 namelist<-array(c("plot_CLS1.txt","plot_CLS2.txt","plot_CLS3.txt","plot_list.txt"),dim=c(1,4))
 pdf(sprintf("plots.pdf"))
 apply(X=namelist, MARGIN = 2, 
@@ -21,6 +23,7 @@ apply(X=namelist, MARGIN = 2,
 	}
 	)
 
+#position graph
 namelist<-array(c("plot_CLS1_position.txt","plot_CLS2_position.txt","plot_CLS3_position.txt","plot_list_position.txt"),dim=c(1,4))
 apply(X=namelist, MARGIN = 2, 
       FUN = function(a){
