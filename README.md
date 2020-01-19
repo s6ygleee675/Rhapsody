@@ -16,7 +16,7 @@
    
    plot_**_position.txt : marking/target code detecting result file( eg. 3123.68 -> 3123th line 68th position)
    
-   plots.pdf : 
+   plots.pdf : Gene code detection result graphs
   
 4. Add the gene.R file for output pdf graph
 
