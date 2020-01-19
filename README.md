@@ -10,9 +10,15 @@
    
    list.txt : Target code file
   
-   short.fastq : analyzing file
+   **.fastq : analyzing file
    
-   1000_from_middle.fastq : analyzing file
+   plot_**.txt : marking/target code detecting result file (frequency, error)
    
+   plot_**_position.txt : marking/target code detecting result file( eg. 3123.68 -> 3123th line 68th position)
+   
+   plots.pdf : 
+  
+4. Add the gene.R file for output pdf graph
+
    gene.R : graph generating R file based on txt-output
   
